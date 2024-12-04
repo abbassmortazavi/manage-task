@@ -1,0 +1,21 @@
+{
+    "name": "abbass/php-mvc",
+    "authors": [
+        {
+            "name": "Abbass",
+            "email": "abbassmortazavi@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.4",
+      "ext-pdo": "*",
+        "guzzlehttp/guzzle": "^7.8",
+      "ext-json": "*",
+        "zircote/swagger-php": "^4.7"
+    }
+}
