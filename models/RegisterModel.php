@@ -1,29 +1,25 @@
 <?php
-/**
- * Project:  phpMvc
- * FileName: ${FILE_NAME}
- * User:     abbass
- * Time:     19:42
- * Date:     2022/04/30
- */
 
+/**
+ * RegisterModel.php
+ * @author Abbass Mortazavi <abbassmortazavi@gmail.com | Abbass Mortazavi>
+ * @copyright Copyright &copy; from assessment
+ * @version 1.0.0
+ * @date 2024/12/04 21:50
+ */
 namespace app\models;
 
-use app\core\Application;
-use app\core\Database;
 use app\core\Model;
 
 class RegisterModel extends Model
 {
 
+
     public function register($name, $email, $password, $role) {
-        $query = "INSERT INTO users (name, email, password, role) VALUES (:name, :email, :password, :role)";
-        $stmt = $this->db->pdo->prepare($query);
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $password);
-        $stmt->bindParam(':role', $role);
-        $stmt->execute();
+
+        var_dump($name,$email,$password,$role);
+        $query = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
+        return $this->db->execute($query, [$name, $email, $password, $role]);
     }
 
 }

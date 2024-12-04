@@ -1,11 +1,5 @@
 <?php
-/**
- * Project:  phpMvc
- * FileName: Controller.php
- * User:     abbass
- * Time:     16:15
- * Date:     2022/04/28
- */
+
 
 namespace app\core;
 
