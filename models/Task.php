@@ -75,8 +75,17 @@ class Task extends Model
     }
 
 
-    // Update an existing task
-    public function updateTask($id, $task_name, $description, $assigned_to, $due_date, $status) {
+    /**
+     * @param $id
+     * @param $task_name
+     * @param $description
+     * @param $assigned_to
+     * @param $due_date
+     * @param $status
+     * @return bool
+     */
+    public function update($id, $task_name, $description, $assigned_to, $due_date, $status): bool
+    {
         $sql = "UPDATE tasks SET task_name = :task_name, description = :description, 
                 assigned_to = :assigned_to, due_date = :due_date, status = :status 
                 WHERE id = :id";
@@ -89,5 +98,16 @@ class Task extends Model
             ':due_date' => $due_date,
             ':status' => $status
         ]);
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function delete($id): bool
+    {
+        $sql = "DELETE FROM tasks WHERE id = :id";
+        $stmt = $this->db->getPDO()->prepare($sql);
+        return $stmt->execute([':id' => $id]);
     }
 }

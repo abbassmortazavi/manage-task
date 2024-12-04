@@ -16,11 +16,13 @@ use app\core\Request;
 use app\models\RegisterModel;
 use app\models\Task;
 use app\services\User\UserService;
+use Exception;
 
 
 class TaskController extends Controller
 {
     protected $task;
+
     public function __construct()
     {
         $this->task = new Task();
@@ -57,6 +59,37 @@ class TaskController extends Controller
     }
 
 
+    public function update(Request $request): mixed
+    {
+
+        try {
+
+            $id = $request->getBody()['id'] ?? null;
+            $task_name = $request->getBody()['task_name'] ?? null;
+            $description = $request->getBody()['description'] ?? null;
+            $assigned_to = $request->getBody()['assigned_to'] ?? null;
+            $due_date = $request->getBody()['due_date'] ?? null;
+            $status = $request->getBody()['status'] ?? null;
+            //$data = json_decode(file_get_contents('php://input'), true);
+            if (isset($task_name, $description, $assigned_to, $due_date, $status)) {
+                $this->task->update(
+                    $id,
+                    $task_name,
+                    $description,
+                    $assigned_to,
+                    $due_date,
+                    $status
+
+                );
+                return json_encode(['message' => 'Task updated successfully']);
+            } else {
+                return json_encode(['error' => 'Missing required fields']);
+            }
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+            return json_decode($exception->getMessage());
+        }
+    }
 
     /**
      * @param array $attributes
@@ -71,5 +104,21 @@ class TaskController extends Controller
         $status = $attributes['status'];
         $model = new Task();
         return $model->create($taskName, $description, $assignedTo, $dueDate, $status);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function delete(Request $request): mixed
+    {
+        try {
+            $id = $request->getBody()['id'] ?? null;
+            $this->task->delete($id);
+            return json_encode(['message' => 'Task deleted successfully']);
+        } catch (Exception $exception) {
+            echo $exception->getMessage();
+            return json_decode($exception->getMessage());
+        }
     }
 }
