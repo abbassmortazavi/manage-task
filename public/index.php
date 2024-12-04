@@ -1,6 +1,7 @@
 <?php
 
 use app\controllers\Api\RegisterUserController;
+use app\controllers\Api\TaskController;
 use app\core\Application;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -19,6 +20,8 @@ $app = new Application(dirname(__DIR__), $config);
 
 
 $app->router->post('/api/register', [RegisterUserController::class, 'register']);
+$app->router->post('/api/task/create', [TaskController::class, 'create']);
+$app->router->get('/api/task/lists', [TaskController::class, 'lists']);
 
 
 

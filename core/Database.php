@@ -13,7 +13,7 @@ class Database
 
     public function __construct()
     {
-        $host = '172.28.0.3';
+        $host = '172.28.0.2';
         $dbName = "task_management";
         $username = 'root';
         $password = 'root';
