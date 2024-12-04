@@ -1,6 +1,6 @@
 <?php
 /**
- * RegisterUserController.php
+ * TaskController.php
  * @author Abbass Mortazavi <abbassmortazavi@gmail.com | Abbass Mortazavi>
  * @copyright Copyright &copy; from assessment
  * @version 1.0.0
@@ -11,12 +11,10 @@
 namespace app\controllers\Api;
 
 use app\core\Controller;
-use app\core\Database;
 use app\core\Request;
-use app\models\RegisterModel;
 use app\models\Task;
-use app\services\User\UserService;
 use Exception;
+use OpenApi\Annotations as OA;
 
 
 class TaskController extends Controller
@@ -29,8 +27,78 @@ class TaskController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return bool|mixed
+     * @OA\Post(
+     *     path="/api/task/create",
+     *     summary="Create a new task",
+     *     description="This endpoint allows you to create a new task by providing the task details.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\Content(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"task_name", "description", "assigned_to", "due_date", "status"},
+     *                 @OA\Property(
+     *                     property="task_name",
+     *                     type="string",
+     *                     description="The name of the task",
+     *                     example="Complete the report"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     type="string",
+     *                     description="A detailed description of the task",
+     *                     example="Write the final report for the project"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="assigned_to",
+     *                     type="string",
+     *                     description="The person to whom the task is assigned",
+     *                     example="John Doe"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="due_date",
+     *                     type="string",
+     *                     format="date",
+     *                     description="The due date for the task",
+     *                     example="2024-12-10"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="status",
+     *                     type="string",
+     *                     description="The current status of the task",
+     *                     enum={"pending", "in_progress", "completed"},
+     *                     example="pending"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Task created successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Task created successfully"),
+     *             @OA\Property(property="task_id", type="integer", example=123)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Bad Request, invalid input",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Invalid input data")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Server error, please try again later")
+     *         )
+     *     )
+     * )
      */
     public function create(Request $request): mixed
     {
@@ -43,8 +111,20 @@ class TaskController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return false|mixed|string
+     * @OA\Get(
+     *     path="/api/task/lists",
+     *     summary="This Api Show All Tasks",
+     *    @OA\Parameter(
+     *          name="name",
+     *          in="query",
+     *          description="Please enter Owner like: abbassmortazavi",
+     *          required=false,
+     *          @OA\Schema(type="string")
+     *      ),
+     *     @OA\Response(response="200", description="Create successful"),
+     *     @OA\Response(response="401", description="Invalid credentials")
+     * )
+     *
      */
     public function lists(Request $request): mixed
     {
@@ -58,12 +138,14 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
 
     public function update(Request $request): mixed
     {
-
         try {
-
             $id = $request->getBody()['id'] ?? null;
             $task_name = $request->getBody()['task_name'] ?? null;
             $description = $request->getBody()['description'] ?? null;
@@ -85,7 +167,7 @@ class TaskController extends Controller
             } else {
                 return json_encode(['error' => 'Missing required fields']);
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             echo $exception->getMessage();
             return json_decode($exception->getMessage());
         }

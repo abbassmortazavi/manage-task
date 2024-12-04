@@ -19,7 +19,7 @@ $config = [
 $app = new Application(dirname(__DIR__), $config);
 
 
-$app->router->post('/api/register', [RegisterUserController::class, 'register']);
+$app->router->post('/api/user/register', [RegisterUserController::class, 'register']);
 $app->router->post('/api/task/create', [TaskController::class, 'create']);
 $app->router->get('/api/task/lists', [TaskController::class, 'lists']);
 $app->router->post('/api/task/edit', [TaskController::class, 'update']);
